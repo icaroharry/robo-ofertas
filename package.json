@@ -17,6 +17,11 @@
   },
   "homepage": "https://github.com/icaroharry/robo-ofertas#readme",
   "dependencies": {
-    "twit": "^2.2.5"
+    "co": "^4.6.0",
+    "prompt": "^1.0.0",
+    "twit": "^2.2.5",
+    "twitter": "^1.7.0",
+    "twitter-pin-auth": "^0.2.0",
+    "webkit-opener": "^0.1.2"
   }
 }
