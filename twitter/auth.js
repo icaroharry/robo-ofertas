@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require('./../config');
 const prompt = require('prompt');
 const webkitOpener = require('webkit-opener');
 const TwitterPinAuth = require('twitter-pin-auth');
@@ -28,6 +28,7 @@ exports.getAuth = function(callback) {
         config.accessTokenKey = authData.accessTokenKey;
         config.accessTokenSecret = authData.accessTokenSecret;
         fs.writeFileSync('config.json', JSON.stringify(config));
+        callback(authData);
       }).catch(function(err) {
         console.error(err);
       });
