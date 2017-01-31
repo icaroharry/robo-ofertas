@@ -18,6 +18,8 @@
   "homepage": "https://github.com/icaroharry/robo-ofertas#readme",
   "dependencies": {
     "co": "^4.6.0",
+    "goo.gl": "^0.1.4",
+    "node-base64-image": "^1.0.3",
     "prompt": "^1.0.0",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",

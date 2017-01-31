@@ -18,6 +18,13 @@ const topOffers = co.wrap(function *() {
   return result;
 });
 
+const mockOffers = () => {
+  let fs = require('fs');
+  let result = JSON.parse(fs.readFileSync('offers.json'));
+  return result;
+}
+
 module.exports = {
-  topOffers
+  topOffers,
+  mockOffers
 };
