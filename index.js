@@ -14,8 +14,8 @@ const getOffers = co.wrap(function *() {
 
 const buildTweetMessage = co.wrap(function *(offer) {
   console.log(offer);
-  let smallName = offer.offershortname;
-  let link = yield googl.shorten(offer.links[0].link.url);
+  let smallName = offer.offerName.split(' ', 3).join(' ');
+  let link = yield googl.shorten(offer.links.link[0].url);
   let tweet = `${smallName} na promoção! ${link} #oferta #desconto #game #games #jogos #ps4 #xbox`;
   return tweet;
 });
@@ -39,28 +39,28 @@ const getImage = (url, fn) => {
   });
 }
 
-let offers = lomadee.mockOffers();
-offers = offers.offer;
+// let offers = lomadee.topOffers();
+// offers = offers.offer;
 let count = 0;
 
 
 (function execute(){
   co(function *() {
+    offers = yield getOffers();
+    console.log(offers);
     if(count > 29) {
       count = 0;
     }
-    getImage(offers[count].offer.thumbnail.url, function (img) {
-      console.log('test')
-
+    getImage(offers[count].thumbnail.url, function (img) {
       try {
-        buildTweetMessage(offers[count].offer).then((msg) => {
+        buildTweetMessage(offers[count]).then((msg) => {
           let result = tweet(msg, img);
+          count++;
         });
       } catch(err) {
         console.log(err);
       }
     });
-    count++;
-    setTimeout(execute, 60000 * 40);
+    setTimeout(execute, 60000 * 60 * 5);
   });
 })();
