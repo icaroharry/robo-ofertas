@@ -11,7 +11,7 @@
   <script type="text/javascript">
   function httpGet() {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", 'http://localhost:3000/topOffers', true); // false for synchronous request
+    xmlHttp.open("GET", 'https://roboofertas.herokuapp.com/topOffers', true); // false for synchronous request
     xmlHttp.send(null);
     return xmlHttp.responseText;
   }
