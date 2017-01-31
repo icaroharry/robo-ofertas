@@ -5,7 +5,7 @@ const config = require('./../config');
 const API_ADDRESS = 'http://sandbox.buscape.com.br/service/v2'
 
 function buildRequest(endpoint) {
-  return `${API_ADDRESS}/${endpoint}/lomadee/${config.appToken}/BR/?sourceId=${config.sourceId}&format=json&categoryId=77&page=1&program=lomadee`;
+  return `${API_ADDRESS}/${endpoint}/lomadee/${config.appToken}/BR/?sourceId=${config.sourceId}&format=json&categoryId=77&page=1`;
 }
 
 const topOffers = co.wrap(function *() {
