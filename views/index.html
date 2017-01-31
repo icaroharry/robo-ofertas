@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Homologação Lomadee</title>
+  </head>
+  <body>
+    <input id="topOffers" type="button" value="GET topOffers from LOMADEE" onclick="httpGet();" />
+  </body>
+
+  <script type="text/javascript">
+  function httpGet() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", 'http://localhost:3000/topOffers', true); // false for synchronous request
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+  }
+  </script>
+</html>

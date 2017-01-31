@@ -39,28 +39,51 @@ const getImage = (url, fn) => {
   });
 }
 
+co(function *() {
+  var express = require('express');
+  var app = express();
+
+  app.engine('html', require('ejs').renderFile);
+  app.set('view engine', 'html');
+
+  app.get('/', function (req, res) {
+    res.render('index.html');
+  });
+
+  app.get('/topOffers', function (req, res, next) {
+    console.log('asdasd');
+
+    getOffers().then((offers) => {
+      res.send(offers);
+    });
+  });
+
+  app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+  });
+});
 // let offers = lomadee.topOffers();
 // offers = offers.offer;
 let count = 0;
-
-
-(function execute(){
-  co(function *() {
-    offers = yield getOffers();
-    console.log(offers);
-    if(count > 29) {
-      count = 0;
-    }
-    getImage(offers[count].thumbnail.url, function (img) {
-      try {
-        buildTweetMessage(offers[count]).then((msg) => {
-          let result = tweet(msg, img);
-          count++;
-        });
-      } catch(err) {
-        console.log(err);
-      }
-    });
-    setTimeout(execute, 60000 * 60 * 5);
-  });
-})();
+//
+//
+// (function execute(){
+//   co(function *() {
+//     offers = yield getOffers();
+//     console.log(offers);
+//     if(count > 29) {
+//       count = 0;
+//     }
+//     getImage(offers[count].thumbnail.url, function (img) {
+//       try {
+//         buildTweetMessage(offers[count]).then((msg) => {
+//           let result = tweet(msg, img);
+//           count++;
+//         });
+//       } catch(err) {
+//         console.log(err);
+//       }
+//     });
+//     setTimeout(execute, 60000 * 60 * 5);
+//   });
+// })();
