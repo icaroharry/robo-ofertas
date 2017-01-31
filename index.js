@@ -14,9 +14,9 @@ const getOffers = co.wrap(function *() {
 
 const buildTweetMessage = co.wrap(function *(offer) {
   console.log(offer);
-  let smallName = offer.offerName.split(' ', 3).join(' ');
-  let link = yield googl.shorten(offer.links.link[0].url);
-  let tweet = `${smallName} na promoção! ${link} #oferta #desconto #game #games #jogos #ps4 #xbox`;
+  let smallName = offer.offershortname;
+  let link = yield googl.shorten(offer.links[0].link.url);
+  let tweet = `${smallName}na promoção! ${link} #oferta #desconto #game #games #jogos #ps4 #xbox`;
   return tweet;
 });
 
@@ -39,51 +39,27 @@ const getImage = (url, fn) => {
   });
 }
 
-co(function *() {
-  var express = require('express');
-  var app = express();
 
-  app.engine('html', require('ejs').renderFile);
-  app.set('view engine', 'html');
+let offers = lomadee.mockOffers();
+offers = offers.offer;
+let count = 2;
 
-  app.get('/', function (req, res) {
-    res.render('index.html');
-  });
-
-  app.get('/topOffers', function (req, res, next) {
-    console.log('asdasd');
-
-    getOffers().then((offers) => {
-      res.send(offers);
+(function execute(){
+  co(function *() {
+    if(count > 29) {
+      count = 0;
+    }
+    console.log(offers.links);
+    getImage(offers[count].offer.thumbnail.url, function (img) {
+      try {
+        buildTweetMessage(offers[count].offer).then((msg) => {
+          let result = tweet(msg, img);
+          count++;
+        });
+      } catch(err) {
+        console.log(err);
+      }
     });
+    setTimeout(execute, 60000 * 30);
   });
-
-  app.listen(process.env.PORT || 3000, function () {
-    console.log('Example app listening on port 3000!');
-  });
-});
-// let offers = lomadee.topOffers();
-// offers = offers.offer;
-let count = 0;
-//
-//
-// (function execute(){
-//   co(function *() {
-//     offers = yield getOffers();
-//     console.log(offers);
-//     if(count > 29) {
-//       count = 0;
-//     }
-//     getImage(offers[count].thumbnail.url, function (img) {
-//       try {
-//         buildTweetMessage(offers[count]).then((msg) => {
-//           let result = tweet(msg, img);
-//           count++;
-//         });
-//       } catch(err) {
-//         console.log(err);
-//       }
-//     });
-//     setTimeout(execute, 60000 * 60 * 5);
-//   });
-// })();
+})();
