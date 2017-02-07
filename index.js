@@ -1,3 +1,5 @@
+require('newrelic');
+
 const twitter = require('./twitter').loginTwitter();
 const lomadee = require('./lomadee');
 const co = require('co');
@@ -5,8 +7,6 @@ const googl = require('goo.gl');
 const base64 = require('node-base64-image');
 const emoji = require('node-emoji');
 const http = require('http');
-
-require('newrelic');
 
 http.createServer(function (request, response) {}).listen(process.env.PORT || 5000);
 
