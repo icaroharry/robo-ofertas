@@ -81,8 +81,8 @@ function buildHashtags(category) {
 
     case 3661: result = '#arcondicionado #oferta #desconto';
       break;
-
   }
+  return result;
 }
 
 const buildTweetMessage = co.wrap(function *(offer) {
@@ -91,7 +91,7 @@ const buildTweetMessage = co.wrap(function *(offer) {
   let smallName = offer.offerName.split(' ', 5).join(' ');
 
   let link = yield googl.shorten(offer.links.link[0].url);
-  let tweet = `${emoji.get('moneybag')} ${sentence}! ${emoji.get('blush')} \n\n${link} \n\n${smallName} ${randomizePriceMsg(offer.discountPercent, offer.priceValue)} \n#oferta #desconto #smartphone`;
+  let tweet = `${emoji.get('moneybag')} ${sentence}! ${emoji.get('blush')} \n\n${link} \n\n${smallName} ${randomizePriceMsg(offer.discountPercent, offer.priceValue)} \n${buildHashtags(offer.categoryId)}`;
   console.log(tweet);
   return tweet;
 });
