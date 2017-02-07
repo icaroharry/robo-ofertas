@@ -3,8 +3,11 @@ const lomadee = require('./lomadee');
 const co = require('co');
 const googl = require('goo.gl');
 const base64 = require('node-base64-image');
+const emoji = require('node-emoji');
 
 googl.setKey('AIzaSyB820n6JnhRVAVAt3UliN9W3Z7oXcj4kY4');
+
+let usedOffers = {};
 
 const getOffers = co.wrap(function *() {
   let offers = yield lomadee.topOffers();
@@ -12,16 +15,79 @@ const getOffers = co.wrap(function *() {
   return offers;
 });
 
+function randomizeMsg() {
+  let sentences = [];
+  sentences.push('Não perca tempo');
+  sentences.push('Aproveite');
+  sentences.push('Alerta');
+  sentences.push('Promoção na área');
+  sentences.push('Olha a oferta');
+  sentences.push('Quebra o porquinho');
+  sentences.push('Ótima oportunidade');
+
+  return sentences[Math.floor(Math.random() * sentences.length)];
+};
+
+function randomizePriceMsg(discount, price) {
+  let sentences = [];
+  let result;
+
+  sentences.push(`com até ${discount}% de desconto!`);
+  sentences.push(`por apenas R$${price.toString().split('.').join(',')}!`);
+
+  if(!discount) {
+    result = sentences[1]
+  } else if(!price) {
+    result = sentences[0];
+  } else {
+    result = sentences[Math.floor(Math.random() * sentences.length)];
+  }
+
+  return result
+}
+
+function buildHashtags(category) {
+  let result;
+  switch (category) {
+    case 77: result = '#smartphone #oferta #desconto';
+      break;
+
+    case 6424: result = '#notebook #oferta #desconto';
+      break;
+
+    case 2852: result = '#smarttv #tv #desconto';
+      break;
+
+    case 3671: result = '#maquinadelavar #oferta';
+      break;
+
+    case 2376: result = '#gamer #games #console';
+      break;
+
+    case 6058: result = '#gamer #jogos #game';
+      break;
+
+    case 3482: result = '#livros #oferta #desconto';
+      break;
+
+    case 3661: result = '#arcondicionado #oferta #desconto';
+      break;
+
+  }
+}
+
 const buildTweetMessage = co.wrap(function *(offer) {
   console.log(offer);
-  let smallName = offer.offerName.split(' ', 3).join(' ');
+  let sentence = randomizeMsg();
+  let smallName = offer.offerName.split(' ', 5).join(' ');
+
   let link = yield googl.shorten(offer.links.link[0].url);
-  let tweet = `${smallName} na promoção! ${link} #oferta #desconto #game #games #jogos #ps4 #xbox`;
+  let tweet = `${emoji.get('moneybag')} ${sentence}! ${emoji.get('blush')} \n\n${link} \n\n${smallName} ${randomizePriceMsg(offer.discountPercent, offer.priceValue)} \n#oferta #desconto #smartphone`;
   return tweet;
 });
 
 const tweet = co.wrap(function *(msg, image) {
-  console.log(msg, image);
+  console.log(msg);
   let img = yield twitter.post('media/upload', {media: image});
   let result = yield twitter.post('statuses/update', {status: msg, media_ids: img.media_id_string});
   return result;
@@ -37,53 +103,32 @@ const getImage = (url, fn) => {
   base64.encode(url, {}, (err, result) => {
     fn(result);
   });
-}
+};
 
-co(function *() {
-  var express = require('express');
-  var app = express();
 
-  app.engine('html', require('ejs').renderFile);
-  app.set('view engine', 'html');
-
-  app.get('/', function (req, res) {
-    res.render('index.html');
-  });
-
-  app.get('/topOffers', function (req, res, next) {
-    console.log('asdasd');
-
-    getOffers().then((offers) => {
-      res.send(offers);
-    });
-  });
-
-  app.listen(process.env.PORT || 3000, function () {
-    console.log('Example app listening on port 3000!');
-  });
-});
-// let offers = lomadee.topOffers();
-// offers = offers.offer;
 let count = 0;
-//
-//
-// (function execute(){
-//   co(function *() {
-//     offers = yield getOffers();
-//     console.log(offers);
-//     if(count > 29) {
-//       count = 0;
-//     }
-//     getImage(offers[count].thumbnail.url, function (img) {
-//       try {
-//         buildTweetMessage(offers[count]).then((msg) => {
-//           let result = tweet(msg, img);
-//           count++;
-//         });
-//       } catch(err) {
-//         console.log(err);
-//       }
-//     });
-//     setTimeout(execute, 60000 * 60 * 5);
-//   });
-// })();
+
+let categories = [77, 6424, 2852, 3671, 2376, 6058, 3482, 3661];
+
+(function execute(){
+  co(function *() {
+    let offers = yield lomadee.topOffers(categories[Math.floor(Math.random() * categories.length)]);
+    offers = offers.offer;
+    let offersIndex = 0
+    while(usedOffers[offers[offersIndex].id] === true) {
+      offersIndex++;
+    }
+    getImage(offers[0].thumbnail.url, function (img) {
+      try {
+        buildTweetMessage(offers[0]).then((msg) => {
+          let result = tweet(msg, img);
+          count++;
+          usedOffers[offers[offersIndex].id] = true;
+        });
+      } catch(err) {
+        console.log(err);
+      }
+    });
+    setTimeout(execute, 60000 * 30);
+  });
+})();
