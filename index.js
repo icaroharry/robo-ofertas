@@ -78,9 +78,6 @@ function buildHashtags(category) {
     case 6058: result = '#gamer #jogos #game';
       break;
 
-    case 3482: result = '#livros #oferta #desconto';
-      break;
-
     case 3661: result = '#arcondicionado #oferta #desconto';
       break;
   }
@@ -117,23 +114,26 @@ const getImage = (url, fn) => {
   });
 };
 
+const randomOffer = (offers) => {
+  return Math.floor(Math.random() * offers.length);
+}
 
 let count = 0;
 
-let categories = [77, 6424, 2852, 3671, 2376, 6058, 3482, 3661];
+let categories = [77, 6424, 2852, 3671, 2376, 6058, 3661];
 
 (function execute(){
   co(function *() {
     let offers = yield lomadee.topOffers(categories[Math.floor(Math.random() * categories.length)]);
     offers = offers.offer;
-    let offersIndex = 0
+    let offersIndex = randomOffer(offers);
     while(usedOffers[offers[offersIndex]]) {
-      offersIndex++;
+      offersIndex = randomOffer(offers);
     }
     getImage(offers[0].thumbnail.url, function (img) {
       try {
         buildTweetMessage(offers[0]).then((msg) => {
-          let result = tweet(msg, img);
+          //let result = tweet(msg, img);
           count++;
           usedOffers[offers[offersIndex].id] = true;
         });
