@@ -4,6 +4,9 @@ const co = require('co');
 const googl = require('goo.gl');
 const base64 = require('node-base64-image');
 const emoji = require('node-emoji');
+const http = require('http');
+
+http.createServer(function (request, response) {}).listen(process.env.PORT || 5000);
 
 googl.setKey('AIzaSyB820n6JnhRVAVAt3UliN9W3Z7oXcj4kY4');
 
@@ -31,9 +34,15 @@ function randomizeMsg() {
 function randomizePriceMsg(discount, price) {
   let sentences = [];
   let result;
+  let splitPrice = price.toString().split('.');
+  if(splitPrice[1].length === 1) {
+    splitPrice[1] += '0';
+  }
+
+  let correctPrice = splitPrice.join(',');
 
   sentences.push(`com até ${discount}% de desconto!`);
-  sentences.push(`por apenas R$${price.toString().split('.').join(',')}!`);
+  sentences.push(`por apenas R$${correctPrice}`);
 
   if(!discount) {
     result = sentences[1]
@@ -83,6 +92,7 @@ const buildTweetMessage = co.wrap(function *(offer) {
 
   let link = yield googl.shorten(offer.links.link[0].url);
   let tweet = `${emoji.get('moneybag')} ${sentence}! ${emoji.get('blush')} \n\n${link} \n\n${smallName} ${randomizePriceMsg(offer.discountPercent, offer.priceValue)} \n#oferta #desconto #smartphone`;
+  console.log(tweet);
   return tweet;
 });
 
@@ -115,7 +125,7 @@ let categories = [77, 6424, 2852, 3671, 2376, 6058, 3482, 3661];
     let offers = yield lomadee.topOffers(categories[Math.floor(Math.random() * categories.length)]);
     offers = offers.offer;
     let offersIndex = 0
-    while(usedOffers[offers[offersIndex].id] === true) {
+    while(usedOffers[offers[offersIndex]]) {
       offersIndex++;
     }
     getImage(offers[0].thumbnail.url, function (img) {
