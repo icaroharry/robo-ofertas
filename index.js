@@ -6,6 +6,8 @@ const base64 = require('node-base64-image');
 const emoji = require('node-emoji');
 const http = require('http');
 
+require('newrelic');
+
 http.createServer(function (request, response) {}).listen(process.env.PORT || 5000);
 
 googl.setKey('AIzaSyB820n6JnhRVAVAt3UliN9W3Z7oXcj4kY4');
