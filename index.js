@@ -36,7 +36,6 @@ const postTweet = co.wrap(function *(msg, image) {
       });
     } catch(err) {
       console.log(err);
-      execute();
     }
     setTimeout(execute, 60000 * 45);
   });
