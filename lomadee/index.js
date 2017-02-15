@@ -1,3 +1,5 @@
+'use strict';
+
 const request = require('request-promise');
 const co = require('co');
 const config = require('./../config');

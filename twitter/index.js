@@ -1,3 +1,5 @@
+'use strict';
+
 const Twitter = require('twitter');
 const config = require('./../config');
 const twitterPin = require('./auth');

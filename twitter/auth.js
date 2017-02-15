@@ -1,3 +1,5 @@
+'use strict';
+
 const config = require('./../config');
 const prompt = require('prompt');
 const webkitOpener = require('webkit-opener');

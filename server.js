@@ -1,3 +1,5 @@
+'use strict';
+
 const tweet = require('./twitter/tweet');
 const lomadee = require('./lomadee');
 const twitter = require('./twitter').loginTwitter();

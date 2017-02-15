@@ -1,3 +1,6 @@
+'use strict';
+
+
 const googl = require('goo.gl');
 const base64 = require('node-base64-image');
 const emoji = require('node-emoji');
