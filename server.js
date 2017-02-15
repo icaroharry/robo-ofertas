@@ -4,6 +4,9 @@ const tweet = require('./twitter/tweet');
 const lomadee = require('./lomadee');
 const twitter = require('./twitter').loginTwitter();
 const co = require('co');
+const http = require('http');
+
+http.createServer(function (request, response) {}).listen(process.env.PORT || 5000);
 
 let usedOffers = {};
 
