@@ -12,7 +12,7 @@ let usedOffers = {};
 
 let count = 0;
 
-let categories = [77, 6424, 2852, 3671, 6058, 3661];
+let categories = [77];
 
 const postTweet = co.wrap(function *(msg, image) {
   let img = yield twitter.post('media/upload', {media: image});
@@ -23,7 +23,7 @@ const postTweet = co.wrap(function *(msg, image) {
 (function execute(){
   co(function *() {
     try {
-      let random = categories[Math.floor(Math.random() * categories.length)];
+      let random = categories[0];
       let randomPage = categories[Math.floor(Math.random() * 15)];
       let offers = yield lomadee.topOffers(random, randomPage);
       offers = offers.offer;
