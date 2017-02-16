@@ -70,7 +70,7 @@ function randomizePriceMsg(discount, price) {
 function buildHashtags(category) {
   let result;
   switch (category) {
-    case 77: result = '#smartphone #oferta';
+    case 77: result = '#oferta';
       break;
 
     case 6424: result = '#notebook #laptop';
