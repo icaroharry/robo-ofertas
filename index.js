@@ -24,7 +24,7 @@ const postTweet = co.wrap(function *(msg, image) {
   co(function *() {
     try {
       let random = categories[0];
-      let randomPage = categories[Math.floor(Math.random() * 15)];
+      let randomPage = categories[Math.floor(Math.random() * 100)];
       let offers = yield lomadee.topOffers(random, randomPage);
       offers = offers.offer;
       let offersIndex = tweet.randomOffer(offers);

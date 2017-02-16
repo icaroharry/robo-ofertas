@@ -70,10 +70,10 @@ function randomizePriceMsg(discount, price) {
 function buildHashtags(category) {
   let result;
   switch (category) {
-    case 77: result = '#smartphone #oferta #desconto';
+    case 77: result = '#smartphone #oferta';
       break;
 
-    case 6424: result = '#notebook #oferta #desconto #laptop';
+    case 6424: result = '#notebook #laptop';
       break;
 
     case 2852: result = '#smarttv #tv #desconto';
@@ -85,7 +85,7 @@ function buildHashtags(category) {
     case 6058: result = '#gamer #jogos #game';
       break;
 
-    case 3661: result = '#arcondicionado #oferta #desconto';
+    case 3661: result = '#arcondicionado';
       break;
   }
   return result;
