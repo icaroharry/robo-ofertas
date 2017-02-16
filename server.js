@@ -25,7 +25,7 @@ const postTweet = co.wrap(function *(msg, image) {
     try {
       let random = categories[Math.floor(Math.random() * categories.length)];
       let randomPage = categories[Math.floor(Math.random() * 15)];
-      let offers = yield lomadee.topOffers(random, randomPage);
+      let offers = yield lomadee.topOffers(random, 1);
       offers = offers.offer;
       let offersIndex = tweet.randomOffer(offers);
       while(usedOffers[offers[offersIndex]]) {
@@ -34,7 +34,7 @@ const postTweet = co.wrap(function *(msg, image) {
       tweet.getImage(offers[offersIndex].thumbnail.url, function (img) {
 
         tweet.buildTweetMessage(offers[offersIndex]).then((msg) => {
-          try { let result = postTweet(msg, img); } catch(err) {console.log(err)};
+          // try { let result = postTweet(msg, img); } catch(err) {console.log(err)};
           count++;
           usedOffers[offers[offersIndex].id] = true;
         });
@@ -42,6 +42,6 @@ const postTweet = co.wrap(function *(msg, image) {
     } catch(err) {
       console.log(err);
     }
-    setTimeout(execute, 60000 * 45);
+    setTimeout(execute, 60000 * 0.01);
   });
 })();
